@@ -19,6 +19,22 @@ public class FamilyTreeService {
     }
 
     public List<FamilyTree> getAll() {
-        return null;
+        return dao.findAll();
+    }
+
+    public void update(FamilyTree familyTree) {
+        dao.update(familyTree);
+    }
+
+    public void save(FamilyTree familyTree) {
+        dao.save(familyTree);
+    }
+
+    public void delete(FamilyTree familyTree) {
+        dao.delete(familyTree.getFamilyTreeId());
+    }
+
+    public void delete(String familyTreeId) {
+        dao.delete(familyTreeId);
     }
 }

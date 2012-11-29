@@ -3,6 +3,7 @@ package org.demis.family.web.familytree;
 import org.demis.family.core.familytree.FamilyTree;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,6 +25,11 @@ public class FamilyTreeConverter {
     }
 
     public List<FamilyTreeExposed> convert(List<FamilyTree> beans) {
-        return null;
+        ArrayList<FamilyTreeExposed> result = new ArrayList<FamilyTreeExposed>(beans.size());
+
+        for (FamilyTree bean: beans) {
+            result.add(convert(bean));
+        }
+        return result;
     }
 }

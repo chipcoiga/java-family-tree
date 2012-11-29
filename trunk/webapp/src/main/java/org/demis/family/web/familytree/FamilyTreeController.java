@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 import static org.springframework.util.ObjectUtils.isEmpty;
 import static org.springframework.util.ObjectUtils.nullSafeToString;
 
@@ -46,5 +48,13 @@ public class FamilyTreeController {
 
         return converter.convert(familyTree);
     }
+
+    @RequestMapping(value = "/api/familytrees", method = RequestMethod.GET)
+    @ResponseBody
+    @Transactional
+    public List<FamilyTreeExposed> getFamilyTrees() throws ResourceNotFound {
+        return converter.convert(service.getAll());
+    }
+
 
 }
