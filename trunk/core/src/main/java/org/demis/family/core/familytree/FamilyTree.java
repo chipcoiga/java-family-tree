@@ -1,7 +1,6 @@
 package org.demis.family.core.familytree;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 
 import javax.persistence.*;
 
