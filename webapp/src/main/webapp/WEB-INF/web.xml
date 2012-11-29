@@ -33,7 +33,7 @@
       -->
     <servlet>
         <servlet-name>api</servlet-name>
-        <servlet-class>org.demis.family.core.familytree.CustomizedDispatcherServlet</servlet-class>
+        <servlet-class>org.demis.family.web.CustomizedDispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value></param-value>
