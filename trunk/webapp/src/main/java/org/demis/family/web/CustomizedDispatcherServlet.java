@@ -1,4 +1,4 @@
-package org.demis.family.web.familytree;
+package org.demis.family.web;
 
 import org.demis.family.web.ResourceNotFound;
 import org.springframework.web.servlet.DispatcherServlet;

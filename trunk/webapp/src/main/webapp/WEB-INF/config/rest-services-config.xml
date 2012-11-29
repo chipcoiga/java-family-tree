@@ -25,12 +25,13 @@
 		 @Controller, @Service etc.
 	-->
     <context:component-scan base-package="org.demis.family.core" />
+    <context:component-scan base-package="org.demis.family.web" />
 
-	<!--
-		 TODO
-	-->
+    <!--
+          TODO
+     -->
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-    <bean class="org.demis.family.ExceptionHandler" />
+    <bean class="org.demis.family.web.ExceptionHandler" />
 
     <!--
           Configures view for returning JSON to the client

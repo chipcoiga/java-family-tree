@@ -11,6 +11,8 @@ public class FamilyTreeExposed {
 
     private String familyTreeId = null;
 
+    public final static String URI_BASE = "/familytrees/";
+
     private String URI = null;
 
     public String getFamilyTreeId() {

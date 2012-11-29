@@ -15,6 +15,7 @@ public class FamilyTreeConverter {
     public FamilyTreeExposed convert(FamilyTree bean) {
         FamilyTreeExposed exposed = new FamilyTreeExposed();
         exposed.setFamilyTreeId(bean.getFamilyTreeId());
+        exposed.setURI(FamilyTreeExposed.URI_BASE + bean.getFamilyTreeId());
         return exposed;
     }
 
