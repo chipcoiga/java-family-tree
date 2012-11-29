@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.demis</groupId>
-    <artifactId>family-core</artifactId>
+    <artifactId>family-webapp</artifactId>
 
     <parent>
     	<groupId>org.demis</groupId>
@@ -13,7 +13,14 @@
 	    <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.demis</groupId>
+            <artifactId>family-core</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>
