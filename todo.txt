@@ -1,3 +1,5 @@
-- Add PUT or POST/DELETE to /familytrees/{familytreeid}
+- Create a new family tree PUT
+- Update a family tree POST
+- Delete a family tree DELETE
 - Try to upgrade to spring 3.2
-- Add POST or PUT to /familytrees/
+- find the right HTTP status code for save or update error

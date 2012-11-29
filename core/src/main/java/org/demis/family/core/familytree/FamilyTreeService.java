@@ -14,27 +14,27 @@ public class FamilyTreeService {
     @Autowired
     private FamilyTreeDAO dao;
 
-    public FamilyTree getById(String id) {
+    public FamilyTreeEntity getById(String id) {
         return dao.findByPrimaryKey(id);
     }
 
-    public List<FamilyTree> getAll() {
+    public List<FamilyTreeEntity> getAll() {
         return dao.findAll();
     }
 
-    public void update(FamilyTree familyTree) {
-        dao.update(familyTree);
+    public void update(FamilyTreeEntity familyTreeEntity) {
+        dao.update(familyTreeEntity);
     }
 
-    public void save(FamilyTree familyTree) {
-        dao.save(familyTree);
+    public void create(FamilyTreeEntity familyTreeEntity) {
+        dao.save(familyTreeEntity);
     }
 
-    public void delete(FamilyTree familyTree) {
-        dao.delete(familyTree.getFamilyTreeId());
+    public void delete(FamilyTreeEntity familyTreeEntity) {
+        dao.delete(familyTreeEntity.getId());
     }
 
-    public void delete(String familyTreeId) {
-        dao.delete(familyTreeId);
+    public void delete(String id) {
+        dao.delete(id);
     }
 }

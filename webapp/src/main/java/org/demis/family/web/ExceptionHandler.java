@@ -6,7 +6,7 @@ import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
 
 /**
  * Created with IntelliJ IDEA.
- * User: kermabon
+ * UserEntity: kermabon
  * Date: 28/11/12
  * Time: 12:20
  * To change this template use File | Settings | File Templates.
