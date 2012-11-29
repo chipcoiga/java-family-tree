@@ -1,7 +1,17 @@
+create table user (
+    user_id             character varying(32),
+    creation_date       timestamp without time zone,
+    modification_date   timestamp without time zone,
+    email               character varying(255),
+    firstname           character varying(64),
+    lastname            character varying(64),
+    constraint user_pk primary key (user_id)
+)
+
 create table family_tree (
-    family_tree_id   character varying(32),
-    creation_date timestamp without time zone,
-    modification_date timestamp without time zone,
+    family_tree_id      character varying(32),
+    creation_date       timestamp without time zone,
+    modification_date   timestamp without time zone,
     constraint family_tree_pk primary key (family_tree_id)
 );
 

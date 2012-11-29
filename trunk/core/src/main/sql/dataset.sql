@@ -1,2 +1,2 @@
-insert into family_tree values ('abc');
-insert into family_tree values ('def');
+insert into family_tree (family_tree_id, creation_date, modification_date) values ('abc', current_date, current_date);
+insert into family_tree (family_tree_id, creation_date, modification_date) values ('def', current_date, current_date);
