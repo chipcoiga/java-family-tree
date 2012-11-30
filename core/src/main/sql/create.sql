@@ -1,4 +1,4 @@
-create table user (
+create table "user" (
     user_id             character varying(32),
     creation_date       timestamp without time zone,
     modification_date   timestamp without time zone,

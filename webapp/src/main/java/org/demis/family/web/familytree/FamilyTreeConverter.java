@@ -16,7 +16,7 @@ public class FamilyTreeConverter {
 
     public FamilyTreeExposed convert(FamilyTreeEntity bean) {
         FamilyTreeExposed exposed = new FamilyTreeExposed();
-        exposed.setFamilyTreeId(bean.getId());
+        exposed.setId(bean.getId());
         if (bean.getCreationDate() != null)
             exposed.setCreationDate(bean.getCreationDate().getTime());
         if (bean.getModificationDate() != null)
