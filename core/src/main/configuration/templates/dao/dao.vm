@@ -1,0 +1,71 @@
+#parse ("templates/headers/java-class.vm")
+package ${classDescriptor.getPackageDescriptor().getName()} ;
+
+import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.apache.log4j.Logger;
+
+import java.util.List;
+import java.util.Date;
+import java.util.Calendar;
+
+#set ($entityClass = ${classDescriptor.getClassName()} + "Entity")
+import ${classDescriptor.getPackageDescriptor().getName()}.${entityClass};
+
+#if (${collision})
+#set ($className = ${classDescriptor.getClassName()} + "DAOBase")
+#else
+#set ($className = ${classDescriptor.getClassName()} + "DAO")
+#end
+
+
+@Repository
+public class ${className}  {
+
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    private static final Logger logger = Logger.getLogger(${className}.class);
+
+    public ${entityClass} findByPrimaryKey(String id) {
+        return (${entityClass}) sessionFactory.getCurrentSession().get(${entityClass}.class, id);
+    }
+
+    public List<${entityClass}> findAll() {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(${entityClass}.class);
+        return criteria.list();
+
+    }
+
+    public String save(${entityClass} entity) {
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+        entity.setModificationDate(now);
+
+        if (entity.getCreationDate() == null) {
+            entity.setCreationDate(now);
+        }
+
+        return (String) sessionFactory.getCurrentSession().save(entity);
+    }
+
+    public void update(${entityClass} entity) {
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+        entity.setModificationDate(now);
+
+        if (entity.getCreationDate() == null) {
+            entity.setCreationDate(now);
+        }
+
+        sessionFactory.getCurrentSession().merge(entity);
+    }
+
+    public void delete(String id) {
+        ${entityClass} entity = findByPrimaryKey(id);
+        sessionFactory.getCurrentSession().delete(entity);
+    }
+
+}
