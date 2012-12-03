@@ -6,7 +6,7 @@ create table "user" (
     firstname           character varying(64),
     lastname            character varying(64),
     constraint user_pk primary key (user_id)
-)
+);
 
 create table family_tree (
     family_tree_id      character varying(32),

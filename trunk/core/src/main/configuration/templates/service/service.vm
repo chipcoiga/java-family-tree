@@ -1,0 +1,56 @@
+#parse ("templates/headers/java-class.vm")
+#set ($entityClass = ${classDescriptor.getClassName()} + "Entity")
+#set ($daoClass = ${classDescriptor.getClassName()} + "DAO")
+#if (${collision})
+#set ($className = ${classDescriptor.getClassName()} + "ServiceBase")
+#else
+#set ($className = ${classDescriptor.getClassName()} + "Service")
+#end
+
+package ${classDescriptor.getPackageDescriptor().getName()} ;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class ${className} {
+
+    private static final Logger logger = Logger.getLogger(${className}.class);
+
+    @Autowired
+    private ${daoClass} dao;
+
+    @Transactional
+    public ${entityClass} getById(String id) {
+        return dao.findByPrimaryKey(id);
+    }
+
+    @Transactional
+    public List<${entityClass}> getAll() {
+        return dao.findAll();
+    }
+
+    @Transactional
+    public void update(${entityClass} entity) {
+        dao.update(entity);
+    }
+
+    @Transactional
+    public void create(${entityClass} entity) {
+        dao.save(entity);
+    }
+
+    @Transactional
+    public void delete(${entityClass} entity) {
+        dao.delete(entity.getId());
+    }
+
+    @Transactional
+    public void delete(String id) {
+        dao.delete(id);
+    }
+}

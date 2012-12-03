@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <databaseConfiguration>
+        <databaseUrl>jdbc:postgresql://localhost:5432/family</databaseUrl>
+        <databaseUser>demis</databaseUser>
+        <databasePassword>demis</databasePassword>
+        <databaseSchema>public</databaseSchema>
+        <databaseType>POSTGRESQL8</databaseType>
+    </databaseConfiguration>
+
+
+    <objectConfiguration>
+        <packageName>org.demis.family.core</packageName>
+    </objectConfiguration>
+
+    <files>
+        <!-- DAO -->
+        <template>
+            <fileNameTemplate>{packageName}/{className}DAO.java</fileNameTemplate>
+            <templateName>templates/dao/dao.vm</templateName>
+            <path>src/main/generated-java</path>
+            <target>table</target>
+            <name>dao</name>
+            <collision>
+                <manage>true</manage>
+                <result.path>src/main/generated-java</result.path>
+                <check.path>src/main/java</check.path>
+                <filename>{packageName}/{className}DAOBase.java</filename>
+            </collision>
+        </template>
+        <!-- Service -->
+        <template>
+            <fileNameTemplate>{packageName}/{className}Service.java</fileNameTemplate>
+            <templateName>templates/service/service.vm</templateName>
+            <path>src/main/generated-java</path>
+            <target>table</target>
+            <name>service</name>
+            <collision>
+                <manage>true</manage>
+                <result.path>src/main/generated-java</result.path>
+                <check.path>src/main/java</check.path>
+                <filename>{packageName}/{className}ServiceBase.java</filename>
+            </collision>
+        </template>
+
+
+    </files>
+</configuration>
