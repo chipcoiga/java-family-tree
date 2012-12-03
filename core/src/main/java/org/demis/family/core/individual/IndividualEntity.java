@@ -1,6 +1,8 @@
 package org.demis.family.core.individual;
 
 import org.demis.family.core.AbstractEntity;
+import org.demis.family.core.Sex;
+import org.demis.family.core.familyrelation.FamilyRelationEntity;
 import org.demis.family.core.familytree.FamilyTreeEntity;
 import org.demis.family.core.user.UserEntity;
 import org.hibernate.annotations.GenericGenerator;
@@ -25,6 +27,28 @@ public class IndividualEntity extends AbstractEntity {
     @ManyToOne(fetch = LAZY)
     private FamilyTreeEntity familyTree;
 
+    @Column(name = "sosa", nullable = true)
+    private String sosaCode;
+
+    @Column(name = "sex", nullable = true)
+    @Enumerated(EnumType.STRING)
+    private Sex sex;
+
+    @Column(name = "first_name", nullable = true)
+    private String firstName = null;
+
+    @Column(name = "last_name", nullable = true)
+    private String lastName = null;
+
+    @Column(name = "complete_name", nullable = true)
+    private String completeName = null;
+
+    @Column(name = "middle_names", nullable = true)
+    private String middleNames = null;
+
+    @OneToMany(mappedBy = "individual")
+    private List<FamilyRelationEntity> relations;
+
     public IndividualEntity() {
         // no op
     }
@@ -43,6 +67,62 @@ public class IndividualEntity extends AbstractEntity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getSosaCode() {
+        return sosaCode;
+    }
+
+    public void setSosaCode(String sosaCode) {
+        this.sosaCode = sosaCode;
+    }
+
+    public Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCompleteName() {
+        return completeName;
+    }
+
+    public void setCompleteName(String completeName) {
+        this.completeName = completeName;
+    }
+
+    public String getMiddleNames() {
+        return middleNames;
+    }
+
+    public void setMiddleNames(String middleNames) {
+        this.middleNames = middleNames;
+    }
+
+    public List<FamilyRelationEntity> getRelations() {
+        return relations;
+    }
+
+    public void setRelations(List<FamilyRelationEntity> relations) {
+        this.relations = relations;
     }
 
     @Override
