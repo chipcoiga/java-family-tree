@@ -21,10 +21,10 @@ public class UserEntity extends AbstractEntity {
     @Column(name = "email", nullable = true)
     private String email = null;
 
-    @Column(name = "firstname", nullable = true)
+    @Column(name = "first_name", nullable = true)
     private String firstName = null;
 
-    @Column(name = "lastname", nullable = true)
+    @Column(name = "last_name", nullable = true)
     private String lastName = null;
 
     @OneToMany(mappedBy = "user")

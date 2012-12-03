@@ -1,3 +1,5 @@
+drop table family_relation;
+
 drop table family;
 
 drop table individual;

@@ -12,7 +12,8 @@
 
     <modules>
     	<module>core</module>
-	    <module>webapp</module>
+        <module>gedcom</module>
+        <module>webapp</module>
     </modules>
 
     <properties>
