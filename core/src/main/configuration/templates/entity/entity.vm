@@ -1,0 +1,240 @@
+#parse ("templates/headers/java-class.vm")
+package ${classDescriptor.getPackageDescriptor().getName()} ;
+
+import javax.persistence.*;
+import static javax.persistence.FetchType.LAZY;
+import java.io.Serializable;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.hibernate.annotations.GenericGenerator;
+
+#set ($packages = ${objectModelHelper.getPackageDependencies($classDescriptor)})
+#foreach ($package in $packages)
+import ${package.getName()}.* ;
+#end
+
+#if (${collision})
+#set ($className = ${classDescriptor.getClassName()} + "EntityBase")
+@MappedSuperclass
+#else
+#set ($className = ${classDescriptor.getClassName()} + "Entity")
+@Entity
+@Table(name = "${mapping.getTable(${classDescriptor}).getName()}")
+#end
+public class ${className} implements Serializable {
+
+    private static final Logger logger = Logger.getLogger(${className}.class);
+
+## ############################################################################
+## Primary Key
+## ############################################################################
+#if (${classDescriptor.getIdent()})
+#set ( $ident = ${classDescriptor.getIdent()} )
+#if (${ident.getPropertiesCount()} == 1)
+#foreach ($property in ${ident.getProperties()})
+    @Column(name = "${mapping.getColumn(${property}).getName()}", nullable = false, unique = true, length = 32)
+    @GeneratedValue(generator = "strategy-uuid")
+    @GenericGenerator(name = "strategy-uuid", strategy = "uuid")
+    @Id
+    private ${property.getJavaType()} id = null;
+#end
+#end
+#end
+
+## ############################################################################
+## Simple Attribute
+## ############################################################################
+#if (${classDescriptor.getProperties().size()} > 0)
+#foreach( $property in ${classDescriptor.getProperties()} )
+#if ( !${property.isContributeToIdent()} && ! ${property.isContributeToRelation()})
+    @Column(name="${mapping.getColumn(${property}).getName()}", nullable=${mapping.getColumn(${property}).isNotNull()})
+    private $property.getJavaType() $property.getName() = null;
+
+#end
+#end
+#end
+
+## ############################################################################
+## Many to one
+## ############################################################################
+#foreach ( $relation in ${classDescriptor.getLeftRelations()} )
+#foreach ( $leftProperty in ${relation.getLeftProperties()} )
+#set ( $rightProperty = ${relation.getRightProperty($leftProperty)} )
+    @JoinColumn(name = "${mapping.getColumn(${property}).getName()}")
+    @ManyToOne(fetch = LAZY)
+    private ${rightProperty.getClassDescriptor().getClassName()}Entity ${leftProperty.getName()};
+
+#end
+#end
+
+## ############################################################################
+## One to many
+## ############################################################################
+#foreach ( $relation in ${classDescriptor.getRightRelations()} )
+#foreach ( $rightProperty in ${relation.getLeftProperties()} )
+#set ( $leftProperty = ${relation.getLeftProperty($rightProperty)} )
+    @OneToMany(mappedBy = "${leftProperty.getName()}")
+    private List<${rightProperty.getClassDescriptor().getClassName()}Entity> ${relation.getMethodName("elements")};
+
+#end
+#end
+
+## ############################################################################
+## Constructor
+## ############################################################################
+    public ${className}() {
+        // no op
+    }
+
+## ############################################################################
+## Getter Setter (pk)
+## ############################################################################
+#if ($classDescriptor.getIdent())
+#set ( $ident = ${classDescriptor.getIdent()} )
+#if (${ident.getPropertiesCount()} == 1)
+#foreach ($property in ${ident.getProperties()})
+    public $property.getJavaType() ${property.getMethodName("get")}() {
+        return $property.getName() ;
+    }
+
+    public void ${property.getMethodName("set")}($property.getJavaType() $property.getName()) {
+        this.$property.getName() = $property.getName() ;
+    }
+
+#end
+#end
+#end
+
+## ############################################################################
+## Getter Setter (simple)
+## ############################################################################
+#if (${classDescriptor.getProperties().size()} > 0)
+#foreach( $property in ${classDescriptor.getProperties()} )
+#if ( !${property.isContributeToIdent()} && ! ${property.isContributeToRelation()})
+    public ${property.getJavaType()} ${property.getMethodName("get")}() {
+        return ${property.getName()} ;
+    }
+
+    public void ${property.getMethodName("set")}(${property.getJavaType()} ${property.getName()}) {
+        this.${property.getName()} = ${property.getName()} ;
+    }
+
+#end
+#end
+#end
+
+## ############################################################################
+## Getter Setter (many to one)
+## ############################################################################
+#foreach ( $relation in ${classDescriptor.getLeftRelations()} )
+#foreach ( $leftProperty in ${relation.getLeftProperties()} )
+#set ( $rightProperty = ${relation.getRightProperty($leftProperty)} )
+    public void ${leftProperty.getMethodName("set")}( ${rightProperty.getClassDescriptor().getClassName()} ${leftProperty.getName()}) {
+        this.${leftProperty.getName()} = ${leftProperty.getName()};
+    }
+
+    public  ${rightProperty.getClassDescriptor().getClassName()} ${leftProperty.getMethodName("get")}() {
+        return ${leftProperty.getName()};
+    }
+
+    public boolean ${leftProperty.getMethodName("has")}() {
+        return ${leftProperty.getName()} != null ;
+    }
+
+#end
+#end
+
+## ############################################################################
+## Getter Setter (one to many)
+## ############################################################################
+#foreach ( $relation in ${classDescriptor.getRightRelations()} )
+#foreach ( $rightProperty in ${relation.getRightProperties()} )
+#set ( $leftProperty = ${relation.getLeftProperty($rightProperty)} )
+    public void ${relation.getMethodName("sets")}(Collection<${leftProperty.getClassDescriptor().getClassName()}> ${relation.getMethodName("elements")}) {
+        this.${relation.getMethodName("elements")} = ${relation.getMethodName("elements")};
+    }
+
+    public Collection<${leftProperty.getClassDescriptor().getClassName()}> ${relation.getMethodName("gets")}() {
+        return ${relation.getMethodName("elements")};
+    }
+
+    public boolean ${relation.getMethodName("add")}(${leftProperty.getClassDescriptor().getClassName()} ${relation.getMethodName("element")}) {
+        boolean addOk = ${relation.getMethodName("gets")}().add(${relation.getMethodName("element")});
+
+        if (addOk) {
+            ${relation.getMethodName("element")}.${leftProperty.getMethodName("set")}((${classDescriptor.getClassName()})this);
+        } else {
+            if (logger.isWarnEnabled()) {
+                logger.warn("add returned false");
+            }
+        }
+
+        return addOk;
+    }
+
+    public boolean ${relation.getMethodName("adds")}(Collection<${leftProperty.getClassDescriptor().getClassName()}> ${relation.getMethodName("elements")}) {
+        boolean addOk = ${relation.getMethodName("gets")}().addAll(${relation.getMethodName("elements")});
+
+        if (addOk) {
+            for(${leftProperty.getClassDescriptor().getClassName()} ${relation.getMethodName("element")} : ${relation.getMethodName("elements")}) {
+                ${relation.getMethodName("element")}.${leftProperty.getMethodName("set")}((${classDescriptor.getClassName()})this);
+            }
+        } else {
+            if (logger.isWarnEnabled()) {
+                logger.warn("add returned false");
+            }
+        }
+
+        return addOk;
+    }
+
+    public boolean ${relation.getMethodName("contains")}(${leftProperty.getClassDescriptor().getClassName()} ${relation.getMethodName("element")}) {
+        if (${relation.getMethodName("gets")}() == null) {
+            return false;
+        }
+
+        return ${relation.getMethodName("gets")}().contains(${relation.getMethodName("element")});
+    }
+
+    public boolean ${relation.getMethodName("remove")}(${leftProperty.getClassDescriptor().getClassName()} ${relation.getMethodName("element")}) {
+        boolean removedOK = ${relation.getMethodName("gets")}().remove(${relation.getMethodName("element")});
+
+        if (removedOK) {
+            ${relation.getMethodName("element")}.${leftProperty.getMethodName("set")}(null);
+        } else {
+            if (logger.isWarnEnabled()) {
+                logger.warn("remove returned false");
+            }
+        }
+
+        return removedOK;
+    }
+
+    public boolean ${relation.getMethodName("removes")}(Collection<${leftProperty.getClassDescriptor().getClassName()}> ${relation.getMethodName("elements")}) {
+        boolean removedOK = ${relation.getMethodName("gets")}().removeAll(${relation.getMethodName("elements")});
+
+        if (removedOK) {
+            for(${leftProperty.getClassDescriptor().getClassName()} ${relation.getMethodName("element")} : ${relation.getMethodName("elements")}) {
+                ${relation.getMethodName("element")}.${leftProperty.getMethodName("set")}(null);
+            }
+        } else {
+            if (logger.isWarnEnabled()) {
+                logger.warn("remove returned false");
+            }
+        }
+
+        return removedOK;
+    }
+
+    public void ${relation.getMethodName("removeAll")}() {
+        for(${leftProperty.getClassDescriptor().getClassName()} ${relation.getMethodName("element")} : ${relation.getMethodName("gets")}()) {
+            ${relation.getMethodName("element")}.${leftProperty.getMethodName("set")}(null);
+        }
+        ${relation.getMethodName("gets")}().clear();
+    }
+
+#end
+#end
+
+}

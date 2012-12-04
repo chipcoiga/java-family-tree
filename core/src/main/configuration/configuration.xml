@@ -44,7 +44,20 @@
                 <filename>{packageName}/{className}ServiceBase.java</filename>
             </collision>
         </template>
-
+        <!-- Entity -->
+        <!-- template>
+            <fileNameTemplate>{packageName}/{className}Entity.java</fileNameTemplate>
+            <templateName>templates/entity/entity.vm</templateName>
+            <path>src/main/generated-java</path>
+            <target>table</target>
+            <name>service</name>
+            <collision>
+                <manage>false</manage>
+                <result.path>src/main/generated-java</result.path>
+                <check.path>src/main/java</check.path>
+                <filename>{packageName}/{className}EntityBase.java</filename>
+            </collision>
+        </template -->
 
     </files>
 </configuration>
